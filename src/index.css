@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  font-family: "Outfit", sans-serif;
+  color: #f5f5f5;
+  background-color: #080808;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #080808;
+  color: #f5f5f5;
+  font-family: "Outfit", sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(232, 23, 46, 0.35);
+  color: #ffffff;
+}
+
+.cursor-hover {
+  width: 56px !important;
+  height: 56px !important;
+  background: rgba(232, 23, 46, 0.1) !important;
+}
+
+.cursor-view span {
+  opacity: 1 !important;
+}
+
+.cursor-hover span {
+  opacity: 1;
+}
+
+.cursor-view {
+  border-color: rgba(232, 23, 46, 0.8) !important;
+}
+
+.cursor-view span {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+
+.face-front {
+  transform: translateZ(110px);
+}
+
+.face-back {
+  transform: rotateY(180deg) translateZ(110px);
+}
+
+.face-right {
+  transform: rotateY(90deg) translateZ(110px);
+}
+
+.face-left {
+  transform: rotateY(-90deg) translateZ(110px);
+}
+
+.face-top {
+  transform: rotateX(90deg) translateZ(110px);
+}
+
+.face-bottom {
+  transform: rotateX(-90deg) translateZ(110px);
+}
+
+.marquee-row {
+  animation: marquee 25s linear infinite;
+}
+
+.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 32s;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
