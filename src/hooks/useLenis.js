@@ -11,6 +11,9 @@ export function useLenis() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Register Lenis as the official scroll handler for ScrollTrigger
+    ScrollTrigger.normalizeScroll(true);
+
     lenis.current = new Lenis({
       duration: 1.6,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

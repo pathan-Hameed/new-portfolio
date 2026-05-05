@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MagneticButton from "../ui/MagneticButton";
@@ -10,12 +11,13 @@ const links = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
   { href: "#services", label: "Services" },
-  { href: "#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const navRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const nav = navRef.current;
@@ -49,7 +51,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a
-          href="#home"
+          href="/"
           className="font-display text-2xl uppercase tracking-[0.4em] text-white"
         >
           AHK<span className="text-accent-red">.</span>
@@ -70,7 +72,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <MagneticButton className="bg-accent-red text-white shadow-[0_20px_60px_rgba(232,23,46,0.18)] hover:bg-[#e1172ece]">
-            <a href="#contact" className="block px-4 py-3">
+            <a href="/contact" className="block px-4 py-3">
               Hire Me
             </a>
           </MagneticButton>

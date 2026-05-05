@@ -8,34 +8,40 @@ gsap.registerPlugin(ScrollTrigger);
 const services = [
   {
     title: "WhatsApp Automation Systems",
+    slug: "whatsapp-automation",
     description:
       "Automated messaging, reminders, and workflows for customer engagement.",
     tag: "Automation",
   },
   {
     title: "REST API Development",
+    slug: "rest-api-development",
     description:
       "Scalable backend services built with Node.js, Express and MongoDB.",
     tag: "Backend",
   },
   {
     title: "Admin Panel & Dashboards",
+    slug: "admin-panel-dashboards",
     description: "Elegant dashboards for business control and analytics.",
     tag: "Frontend",
   },
   {
     title: "Full-Stack Web Applications",
+    slug: "full-stack-web-applications",
     description: "Responsive web apps combining API, UI, and deployment.",
     tag: "Full-stack",
   },
   {
     title: "Gym Management Systems",
+    slug: "gym-management-systems",
     description:
       "Member tracking, payment reminders, and report automation for gyms.",
     tag: "Health",
   },
   {
     title: "Freelance Consulting",
+    slug: "freelance-consulting",
     description:
       "Strategy, planning, and delivery support for digital projects.",
     tag: "Consulting",
@@ -49,6 +55,8 @@ export default function Services() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray(".service-card");
+
       gsap.from(".service-card", {
         y: 40,
         opacity: 0,
@@ -59,6 +67,12 @@ export default function Services() {
           trigger: sectionRef.current,
           start: "top 80%",
           once: true,
+        },
+        onComplete: () => {
+          // Fallback: ensure all cards are visible
+          cards.forEach((card) => {
+            gsap.to(card, { opacity: 1, duration: 0.1 });
+          });
         },
       });
     }, sectionRef);
@@ -85,7 +99,7 @@ export default function Services() {
             {services.map((service, index) => (
               <div
                 key={service.title}
-                className="service-card relative overflow-hidden rounded-[30px] border border-white/10 bg-bg-card p-8 transition-all duration-300 hover:border-accent-red"
+                className="service-card relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-bg-card p-8 opacity-100 transition-all duration-300 hover:border-accent-red"
               >
                 <div className="absolute top-6 right-6 text-7xl font-display text-white/5">
                   {index + 1}
@@ -100,10 +114,10 @@ export default function Services() {
                   {service.description}
                 </p>
                 <a
-                  href="#contact"
+                  href={`/services/${service.slug}`}
                   className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-white/80 transition-all duration-300 hover:text-accent-red"
                 >
-                  Learn More
+                  View More
                   <span className="transition-transform duration-300 group-hover:translate-x-2">
                     →
                   </span>

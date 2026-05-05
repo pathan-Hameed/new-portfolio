@@ -19,6 +19,7 @@ const skills = [
 export default function About() {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
+  const offsetRef = useRef(null);
   const statsRef = useRef(null);
 
   useEffect(() => {
@@ -45,16 +46,47 @@ export default function About() {
           "-=0.4",
         );
 
-      gsap.to(imageRef.current, {
-        y: -80,
-        ease: "none",
+      // Image entrance animation - slide in from left
+      gsap.from(imageRef.current, {
+        x: -60,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
         scrollTrigger: {
-          trigger: imageRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
+          trigger: sectionRef.current,
+          start: "top 75%",
+          once: true,
         },
       });
+
+      // Offset block scales in with slight delay
+      gsap.from(offsetRef.current, {
+        scale: 0,
+        opacity: 0,
+        duration: 0.7,
+        ease: "back.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+          once: true,
+        },
+        delay: 0.2,
+      });
+
+      // Parallax effect on scroll (mobile check)
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      if (!isMobile) {
+        gsap.to(imageRef.current, {
+          yPercent: -18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
 
       const numbers = statsRef.current.querySelectorAll(".stat-value");
       numbers.forEach((stat) => {
@@ -92,17 +124,46 @@ export default function About() {
       <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,_rgba(232,23,46,0.08),_transparent_45%)]" />
       <div className="relative mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div className="relative">
+          {/* Decorative offset block behind image */}
+          <div
+            ref={offsetRef}
+            className="absolute -inset-4 md:-inset-8 lg:inset-x-4 lg:inset-y-8 rounded-[48px] border border-accent-red/30 bg-accent-red/8 z-0"
+            style={{
+              right: "-16px",
+              bottom: "-16px",
+              width: "calc(100% + 16px)",
+              height: "calc(100% + 16px)",
+            }}
+          />
+
           <div
             ref={imageRef}
-            className="relative overflow-hidden rounded-[48px] border border-white/10 bg-[#111111]/90 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+            className="relative z-10 overflow-hidden rounded-[48px] border border-white/10 bg-[#111111]/90 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
           >
-            <div className="aspect-[3/4] rounded-[36px] bg-gradient-to-br from-[#0f0f0f] via-[#111111] to-[#140000] p-8">
-              <div className="flex h-full items-center justify-center rounded-[28px] border border-white/10 bg-[#080808] tracking-[0.18em]">
-                <img  src={profile} alt="Profile" />
+            <div
+              className="aspect-[3/4] rounded-[36px] bg-gradient-to-br from-[#0f0f0f] via-[#111111] to-[#140000] p-8 relative overflow-hidden"
+              style={{ aspectRatio: "3/4" }}
+            >
+              <div className="flex h-full items-center justify-center rounded-[28px] border border-white/10 bg-[#080808]">
+                <img
+                  src={profile}
+                  alt="Profile"
+                  style={{
+                    aspectRatio: "3/4",
+                    objectFit: "cover",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
               </div>
-            </div>
-            <div className="absolute bottom-0 left-12 rounded-3xl border border-white/10 bg-[#111111]/95 px-4 py-3 text-sm text-white/80 shadow-xl">
-              Based in Mahabubnagar, Telangana 📍
+
+              {/* Top-right geometric accent */}
+              <div className="absolute top-6 right-6 w-10 h-10 border-2 border-accent-red/60" />
+
+              {/* Bottom-left location badge */}
+              <div className="absolute bottom-6 left-6 rounded-2xl border border-white/10 bg-[#111111]/95 backdrop-blur px-3 py-2 text-xs text-white/80 shadow-xl z-20">
+                Mahabubnagar 📍
+              </div>
             </div>
           </div>
           <div className="absolute -bottom-12 right-10 h-24 w-24 rounded-3xl bg-accent-red/15 blur-3xl" />
@@ -110,7 +171,10 @@ export default function About() {
 
         <div className="space-y-8">
           <SectionLabel>About Me</SectionLabel>
-          <div className="overflow-hidden text-4xl font-display uppercase tracking-[0.15em] text-white lg:text-5xl">
+          <div
+            className="overflow-hidden text-4xl font-display uppercase tracking-[0.15em] text-white lg:text-5xl"
+            style={{ wordBreak: "keep-all" }}
+          >
             <p className="about-heading">I TURN IDEAS INTO WORKING SYSTEMS</p>
           </div>
           <div className="space-y-6 text-sm leading-8 text-white/75 lg:text-base">

@@ -40,12 +40,32 @@ export default function CTABanner() {
           LET&apos;S WORK
         </div>
         <div className="space-y-6">
-          <div className="flex flex-wrap justify-center gap-2 text-5xl font-display uppercase tracking-[0.18em] lg:text-6xl">
-            {"READY TO BUILD SOMETHING REAL?".split("").map((char, index) => (
-              <span key={`${char}-${index}`} className="cta-char inline-block">
-                {char}
-              </span>
-            ))}
+          <div
+            className="flex flex-wrap justify-center gap-2 font-display uppercase tracking-[0.18em] text-white"
+            style={{
+              fontSize: "clamp(32px, 5.5vw, 88px)",
+              wordBreak: "keep-all",
+              hyphens: "none",
+            }}
+          >
+            {["READY", "TO", "BUILD", "SOMETHING", "REAL?"].map(
+              (word, wordIndex) => (
+                <span
+                  key={wordIndex}
+                  style={{ whiteSpace: "nowrap" }}
+                  className="inline-block"
+                >
+                  {word.split("").map((char, charIndex) => (
+                    <span
+                      key={`${wordIndex}-${charIndex}`}
+                      className="cta-char inline-block"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </span>
+              ),
+            )}
           </div>
           <p className="max-w-2xl text-sm leading-8 text-white/80 lg:text-base">
             I am currently available for freelance projects in Mahabubnagar and
@@ -55,13 +75,13 @@ export default function CTABanner() {
 
         <div className="flex flex-wrap justify-center gap-4">
           <a
-            href="#contact"
+            href="/contact"
             className="rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-accent-red transition hover:shadow-[0_20px_60px_rgba(255,255,255,0.15)]"
           >
             Start a Project
           </a>
           <a
-            href="https://wa.me/919000000000"
+            href="https://wa.me/918333856442"
             className="rounded-full border border-white/20 px-8 py-4 text-sm uppercase tracking-[0.2em] text-white transition hover:border-accent-red"
           >
             WhatsApp Me
