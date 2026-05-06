@@ -22,7 +22,7 @@ export default function Contact() {
 
   // Initialize EmailJS
   useEffect(() => {
-    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+    emailjs.init(import.meta.env.EMAILJS_PUBLIC_KEY);
   }, []);
 
   // Scroll animation
@@ -102,7 +102,7 @@ export default function Contact() {
     setSubmitStatus(null);
 
     try {
-      await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+      await emailjs.send(import.meta.env.EMAILJS_SERVICE_ID, import.meta.env.EMAILJS_TEMPLATE_ID_FOR_YOU, {
         to_email: "hameed.learner@gmail.com",
         from_name: formData.name,
         from_email: formData.email,
@@ -131,6 +131,11 @@ export default function Contact() {
       setIsLoading(false);
     }
   };
+
+const subject = "Inquiry: Project Partnership";
+const body = "Hello Abdul,\n\nI have been reviewing your portfolio and am impressed by your technical work. I would like to initiate a discussion regarding a potential project.\n\nCould you please let me know your availability for a brief consultation to discuss my requirements and potential collaboration?\n\nBest regards,";
+
+const emailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hameed.learner@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return (
     <>
@@ -195,14 +200,15 @@ export default function Contact() {
                   <p className="mb-4 text-2xl font-bold text-white">
                     +91 83338 56442
                   </p>
-                  <a
-                    href="https://wa.me/918333856442?text=Hi%20Hameed,%20I%20found%20your%20portfolio%20and%20I'd%20like%20to%20discuss%20a%20project."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex rounded-full bg-green-500/20 border border-green-500 px-4 py-2 text-sm uppercase tracking-[0.2em] text-green-400 transition hover:bg-green-500/30"
-                  >
-                    Open WhatsApp
-                  </a>
+                 <a
+  href="https://wa.me/918333856442?text=Hi%20Hameed,%0A%0AI%20have%20been%20reviewing%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20potential%20project.%20I%20am%20interested%20in%20your%20development%20services.%20Are%20you%20available%20for%20a%20brief%20consultation?"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-green-400 transition-all hover:bg-green-500/20 hover:border-green-500/50"
+>
+  {/* Consider adding a small WhatsApp icon here for extra polish */}
+  Start WhatsApp Chat
+</a>
                 </div>
 
                 {/* Email Card */}
@@ -213,12 +219,15 @@ export default function Contact() {
                   <p className="mb-4 text-xl text-white">
                     hameed.learner@gmail.com
                   </p>
-                  <a
-                    href="mailto:hameed.learner@gmail.com"
-                    className="inline-flex rounded-full bg-accent-red/20 border border-accent-red px-4 py-2 text-sm uppercase tracking-[0.2em] text-accent-red transition hover:bg-accent-red/30"
-                  >
-                    Send Email
-                  </a>
+
+<a
+  href={emailLink}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex rounded-full bg-accent-red/20 border border-accent-red px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent-red transition-all hover:bg-accent-red/30 hover:shadow-lg"
+>
+  Send Formal Inquiry
+</a>
                 </div>
 
                 {/* Location Card */}
