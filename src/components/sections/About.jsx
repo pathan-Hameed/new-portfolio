@@ -157,9 +157,7 @@ export default function About() {
                 />
               </div>
 
-              {/* Top-right geometric accent */}
-              <div className="absolute top-6 right-6 w-10 h-10 border-2 border-accent-red/60" />
-
+            
               {/* Bottom-left location badge */}
               <div className="absolute bottom-6 left-6 rounded-2xl border border-white/10 bg-[#111111]/95 backdrop-blur px-3 py-2 text-xs text-white/80 shadow-xl z-20">
                 Mahabubnagar 📍

@@ -56,16 +56,16 @@ export default function Hero() {
           </div>
 
           <div className="mb-6 overflow-hidden">
-            <h1 className="hero-line-1 mb-2 overflow-hidden text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-white">
+            <h1 className="hero-line-1 mb-2 overflow-hidden text-[clamp(55px,12vw,150px)] md:text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-white">
               <span className="block translate-y-[0.05em]">BUILDING</span>
             </h1>
             <h1
-              className="hero-line-2 mb-2 overflow-hidden text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-transparent"
+              className="hero-line-2 mb-2 overflow-hidden text-[clamp(55px,12vw,150px)] md:text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-transparent"
               style={{ WebkitTextStroke: "1px white" }}
             >
               <span className="block">DIGITAL</span>
             </h1>
-            <h1 className="hero-line-3 overflow-hidden text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-white">
+            <h1 className="hero-line-3 overflow-hidden text-[clamp(55px,12vw,150px)] md:text-[clamp(80px,12vw,150px)] font-display uppercase leading-[0.9] tracking-[0.08em] text-white">
               <span className="block">SOLUTIONS</span>
             </h1>
           </div>

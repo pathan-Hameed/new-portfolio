@@ -20,10 +20,20 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState({});
 
+  const emailJSServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const emailJSTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_FOR_YOU;
+  const emailJSPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
   // Initialize EmailJS
   useEffect(() => {
-    emailjs.init(import.meta.env.EMAILJS_PUBLIC_KEY);
-  }, []);
+    if (!emailJSPublicKey) {
+      console.error(
+        "Missing EmailJS public key: please set VITE_EMAILJS_PUBLIC_KEY in .env",
+      );
+      return;
+    }
+    emailjs.init(emailJSPublicKey);
+  }, [emailJSPublicKey]);
 
   // Scroll animation
   useEffect(() => {
@@ -98,19 +108,33 @@ export default function Contact() {
 
     if (!validateForm()) return;
 
+    if (!emailJSServiceId || !emailJSTemplateId || !emailJSPublicKey) {
+      console.error(
+        "Missing EmailJS environment variables. Set VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID_FOR_YOU, and VITE_EMAILJS_PUBLIC_KEY in .env.",
+      );
+      setSubmitStatus("error");
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setSubmitStatus(null);
 
     try {
-      await emailjs.send(import.meta.env.EMAILJS_SERVICE_ID, import.meta.env.EMAILJS_TEMPLATE_ID_FOR_YOU, {
-        to_email: "hameed.learner@gmail.com",
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: "+91" + formData.phone,
-        service: formData.service,
-        budget: formData.budget || "Not specified",
-        message: formData.message,
-      });
+      await emailjs.send(
+        emailJSServiceId,
+        emailJSTemplateId,
+        {
+          to_email: "hameed.learner@gmail.com",
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: "+91" + formData.phone,
+          service: formData.service,
+          budget: formData.budget || "Not specified",
+          message: formData.message,
+        },
+        emailJSPublicKey,
+      );
 
       setSubmitStatus("success");
       setFormData({
@@ -132,10 +156,11 @@ export default function Contact() {
     }
   };
 
-const subject = "Inquiry: Project Partnership";
-const body = "Hello Abdul,\n\nI have been reviewing your portfolio and am impressed by your technical work. I would like to initiate a discussion regarding a potential project.\n\nCould you please let me know your availability for a brief consultation to discuss my requirements and potential collaboration?\n\nBest regards,";
+  const subject = "Inquiry: Project Partnership";
+  const body =
+    "Hello Abdul,\n\nI have been reviewing your portfolio and am impressed by your technical work. I would like to initiate a discussion regarding a potential project.\n\nCould you please let me know your availability for a brief consultation to discuss my requirements and potential collaboration?\n\nBest regards,";
 
-const emailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hameed.learner@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const emailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hameed.learner@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return (
     <>
@@ -200,15 +225,15 @@ const emailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hameed.learner@
                   <p className="mb-4 text-2xl font-bold text-white">
                     +91 83338 56442
                   </p>
-                 <a
-  href="https://wa.me/918333856442?text=Hi%20Hameed,%0A%0AI%20have%20been%20reviewing%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20potential%20project.%20I%20am%20interested%20in%20your%20development%20services.%20Are%20you%20available%20for%20a%20brief%20consultation?"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-green-400 transition-all hover:bg-green-500/20 hover:border-green-500/50"
->
-  {/* Consider adding a small WhatsApp icon here for extra polish */}
-  Start WhatsApp Chat
-</a>
+                  <a
+                    href="https://wa.me/918333856442?text=Hi%20Hameed,%0A%0AI%20have%20been%20reviewing%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20potential%20project.%20I%20am%20interested%20in%20your%20development%20services.%20Are%20you%20available%20for%20a%20brief%20consultation?"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-green-400 transition-all hover:bg-green-500/20 hover:border-green-500/50"
+                  >
+                    {/* Consider adding a small WhatsApp icon here for extra polish */}
+                    Start WhatsApp Chat
+                  </a>
                 </div>
 
                 {/* Email Card */}
@@ -220,14 +245,14 @@ const emailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hameed.learner@
                     hameed.learner@gmail.com
                   </p>
 
-<a
-  href={emailLink}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex rounded-full bg-accent-red/20 border border-accent-red px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent-red transition-all hover:bg-accent-red/30 hover:shadow-lg"
->
-  Send Formal Inquiry
-</a>
+                  <a
+                    href={emailLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-full bg-accent-red/20 border border-accent-red px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent-red transition-all hover:bg-accent-red/30 hover:shadow-lg"
+                  >
+                    Send Formal Inquiry
+                  </a>
                 </div>
 
                 {/* Location Card */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react"; // 1. Switched to useLayoutEffect
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "../ui/SectionLabel";
@@ -49,38 +49,45 @@ const services = [
 ];
 
 export default function Services() {
-  const sectionRef = useRef(null);
+const sectionRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray(".service-card");
+      // 2. Set initial state manually (Prevents them from being stuck at 0)
+      gsap.set(".service-card", { 
+        y: 40, 
+        opacity: 0 
+      });
 
-      gsap.from(".service-card", {
-        y: 40,
-        opacity: 0,
+      // 3. Animate 'to' the final state
+      gsap.to(".service-card", {
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         stagger: 0.12,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%",
+          start: "top 85%",
           once: true,
-        },
-        onComplete: () => {
-          // Fallback: ensure all cards are visible
-          cards.forEach((card) => {
-            gsap.to(card, { opacity: 1, duration: 0.1 });
-          });
+          invalidateOnRefresh: true, // Recalculates on resize
         },
       });
+
+      // 4. THE FIX: Small delay refresh to catch late layout shifts
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+
+      return () => clearTimeout(timer);
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  return (
+ return (
     <section
       id="services"
       ref={sectionRef}
@@ -98,13 +105,13 @@ export default function Services() {
           <div className="grid gap-6 lg:grid-cols-3">
             {services.map((service, index) => (
               <div
-                key={service.title}
-                className="service-card relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-bg-card p-8 opacity-100 transition-all duration-300 hover:border-accent-red"
+                key={index}
+                className="service-card relative overflow-hidden rounded-[30px] border border-white/10 bg-bg-card p-8 transition-all duration-300 hover:border-accent-red group"
               >
                 <div className="absolute top-6 right-6 text-7xl font-display text-white/5">
                   {index + 1}
                 </div>
-                <div className="mb-6 inline-flex h-14 w-20 items-center justify-center rounded-3xl bg-accent-red/10 text-accent-red">
+                <div className="mb-6 inline-flex h-14 w-20 items-center justify-center rounded-3xl bg-accent-red/10 text-accent-red text-xs uppercase tracking-widest font-bold">
                   {service.tag}
                 </div>
                 <h3 className="mb-4 text-xl font-display uppercase tracking-[0.16em] text-white">
@@ -117,7 +124,7 @@ export default function Services() {
                   href={`/services/${service.slug}`}
                   className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-white/80 transition-all duration-300 hover:text-accent-red"
                 >
-                  View More
+                  Learn More
                   <span className="transition-transform duration-300 group-hover:translate-x-2">
                     →
                   </span>
