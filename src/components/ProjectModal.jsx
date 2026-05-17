@@ -6,21 +6,30 @@ import { getProjectById } from "../data/projectData";
 export default function ProjectModal({ projectId, onClose }) {
   const project = getProjectById(projectId);
   const modalRef = useRef(null);
+  const overlayRef = useRef(null);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
   useEffect(() => {
-    // Close on Escape key
     const handleEscape = (e) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleEscape);
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    if (window.__lenis) window.__lenis.stop();
 
     return () => {
       window.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "";
+      if (window.__lenis) window.__lenis.start();
     };
   }, [onClose]);
+
+  const handleOverlayWheel = (e) => {
+    const el = overlayRef.current;
+    if (!el) return;
+    el.scrollBy({ top: e.deltaY, left: 0, behavior: "auto" });
+    e.stopPropagation();
+  };
 
   if (!project) return null;
 
@@ -31,7 +40,10 @@ export default function ProjectModal({ projectId, onClose }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/88 backdrop-blur-sm p-4"
+        data-lenis-prevent
+        ref={overlayRef}
+        onWheel={handleOverlayWheel}
+        className="fixed inset-0 z-50 block bg-black/88 backdrop-blur-sm overflow-y-scroll py-12 px-4"
       >
         <motion.div
           ref={modalRef}
@@ -39,7 +51,8 @@ export default function ProjectModal({ projectId, onClose }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-h-[90vh] overflow-y-auto bg-[#111111] rounded-[40px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.8)]"
+          data-lenis-prevent
+          className="relative w-full h-fit bg-[#111111] rounded-[40px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.8)]"
         >
           {/* Close Button */}
           <button

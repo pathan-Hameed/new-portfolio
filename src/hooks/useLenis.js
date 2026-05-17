@@ -19,6 +19,7 @@ export function useLenis() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
     });
+    window.__lenis = lenis.current;
 
     lenis.current.on("scroll", ScrollTrigger.update);
 
@@ -32,10 +33,11 @@ export function useLenis() {
     ScrollTrigger.refresh();
 
     return () => {
-      gsap.ticker.remove(tick);
-      lenis.current?.destroy();
-      lenis.current = null;
-    };
+  gsap.ticker.remove(tick);
+  lenis.current?.destroy();
+  lenis.current = null;
+  window.__lenis = null;
+};
   }, []);
 
   return lenis;
